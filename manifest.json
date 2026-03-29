@@ -1,0 +1,47 @@
+{
+  "id": "legrand_energy",
+  "name": "Legrand Energy",
+  "version": "1.0.0",
+  "description": "Legrand energy monitoring — NLPC meters, consumption + solar production",
+  "icon": "Zap",
+  "repo": "mchacher/sowel-plugin-legrand-energy",
+  "author": "mchacher",
+  "sowelVersion": ">=0.10.0",
+  "settings": [
+    {
+      "key": "client_id",
+      "label": "Client ID",
+      "type": "text",
+      "required": true,
+      "placeholder": "From dev.netatmo.com"
+    },
+    {
+      "key": "client_secret",
+      "label": "Client Secret",
+      "type": "password",
+      "required": true
+    },
+    {
+      "key": "refresh_token",
+      "label": "Refresh Token",
+      "type": "password",
+      "required": true,
+      "placeholder": "From Netatmo Token Generator"
+    },
+    {
+      "key": "polling_interval",
+      "label": "Polling interval (seconds)",
+      "type": "number",
+      "required": false,
+      "defaultValue": "300",
+      "placeholder": "Min 60, default 300"
+    },
+    {
+      "key": "production_device_name",
+      "label": "Production device name",
+      "type": "text",
+      "required": false,
+      "placeholder": "e.g. Solaire — leave empty to disable production tracking"
+    }
+  ]
+}
