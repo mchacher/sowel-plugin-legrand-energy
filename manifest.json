@@ -1,8 +1,9 @@
 {
   "id": "legrand_energy",
+  "type": "integration",
   "name": "Legrand Energy",
-  "version": "1.0.0",
-  "description": "Legrand energy monitoring — NLPC meters, consumption + solar production",
+  "version": "1.1.0",
+  "description": "Legrand energy monitoring \u2014 NLPC meters, consumption + solar production",
   "icon": "Zap",
   "repo": "mchacher/sowel-plugin-legrand-energy",
   "author": "mchacher",
@@ -41,7 +42,7 @@
       "label": "Production device name",
       "type": "text",
       "required": false,
-      "placeholder": "e.g. Solaire — leave empty to disable production tracking"
+      "placeholder": "e.g. Solaire \u2014 leave empty to disable production tracking"
     }
   ]
 }
