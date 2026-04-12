@@ -130,7 +130,7 @@ const BASE_URL = "https://api.netatmo.com";
 const REQUEST_TIMEOUT_MS = 30_000;
 const REFRESH_MARGIN_S = 300;
 const DEFAULT_POLL_INTERVAL_MS = 300_000;
-const ENERGY_LOOKBACK_S = 6 * 3600;
+const ENERGY_LOOKBACK_S = 12 * 3600;
 const HALF_HOUR = 1800;
 
 // ============================================================

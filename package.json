@@ -1,6 +1,6 @@
 {
   "name": "sowel-plugin-legrand-energy",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Sowel plugin: Legrand Energy (NLPC meters)",
   "type": "module",
   "main": "dist/index.js",

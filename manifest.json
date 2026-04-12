@@ -2,7 +2,7 @@
   "id": "legrand_energy",
   "type": "integration",
   "name": "Legrand Energy",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Legrand energy monitoring \u2014 NLPC meters, consumption + solar production",
   "icon": "Zap",
   "repo": "mchacher/sowel-plugin-legrand-energy",
