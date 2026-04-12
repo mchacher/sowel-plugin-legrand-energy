@@ -452,6 +452,8 @@ class LegrandEnergyPlugin implements IntegrationPlugin {
         this.logger.warn({ err } as Record<string, unknown>, "Energy poll failed"),
       );
 
+      this.logger.info({}, "Energy poll complete");
+
       if (this.pollFailed) {
         this.pollFailed = false;
         this.eventBus.emit({
