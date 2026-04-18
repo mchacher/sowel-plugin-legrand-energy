@@ -42,7 +42,7 @@ interface DiscoveredDevice {
   model?: string;
   data: { key: string; type: string; category: string; unit?: string }[];
   orders: {
-    key: string; type: string; dispatchConfig: Record<string, unknown>;
+    key: string; type: string; dispatchConfig?: Record<string, unknown>;
     min?: number; max?: number; enumValues?: string[]; unit?: string;
   }[];
 }
@@ -85,12 +85,13 @@ interface IntegrationPlugin {
   readonly name: string;
   readonly description: string;
   readonly icon: string;
+  readonly apiVersion?: number;
   getStatus(): IntegrationStatus;
   isConfigured(): boolean;
   getSettingsSchema(): IntegrationSettingDef[];
   start(options?: { pollOffset?: number }): Promise<void>;
   stop(): Promise<void>;
-  executeOrder(device: Device, dispatchConfig: Record<string, unknown>, value: unknown): Promise<void>;
+  executeOrder(device: Device, orderKeyOrDispatchConfig: string | Record<string, unknown>, value: unknown): Promise<void>;
   refresh?(): Promise<void>;
   getPollingInfo?(): { lastPollAt: string; intervalMs: number } | null;
 }
@@ -294,6 +295,7 @@ class LegrandEnergyPlugin implements IntegrationPlugin {
   readonly name = "Legrand Energy";
   readonly description = "Legrand energy monitoring — NLPC meters, consumption + solar production";
   readonly icon = "Zap";
+  readonly apiVersion = 2;
 
   private logger: Logger;
   private eventBus: EventBus;
@@ -414,7 +416,7 @@ class LegrandEnergyPlugin implements IntegrationPlugin {
     this.logger.info("Legrand Energy stopped");
   }
 
-  async executeOrder(_device: Device, _dispatchConfig: Record<string, unknown>, _value: unknown): Promise<void> {
+  async executeOrder(_device: Device, _orderKey: string, _value: unknown): Promise<void> {
     throw new Error("Legrand Energy does not support orders");
   }
 
