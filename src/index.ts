@@ -1,8 +1,10 @@
 /**
  * Sowel Plugin: Legrand Energy
  *
- * Monitors energy consumption and solar production via Legrand NLPC meters.
- * Discovers NLPC modules via homesdata, polls power via homestatus,
+ * Monitors energy consumption and solar production via Legrand energy meters
+ * (NLPC single-point meters and NLY three-phase meters — the latter exposes
+ * one "Total" module plus one module per phase, all sharing the same bridge).
+ * Discovers modules via homesdata, polls power via homestatus,
  * and fetches 30-min energy windows via getMeasure (bridge-level queries).
  *
  * Production device is configured via `production_device_name` setting.
@@ -135,8 +137,12 @@ const ENERGY_LOOKBACK_S = 12 * 3600;
 const HALF_HOUR = 1800;
 
 // ============================================================
-// NLPC device mapping
+// Meter device mapping
 // ============================================================
+
+// NLPC: single-point Legrand energy meters. NLY: three-phase meters — one
+// "Total" module plus three "Phase N" sub-modules, all sharing one bridge.
+const METER_TYPES = new Set(["NLPC", "NLY"]);
 
 function mapMeterToDiscovered(mod: { id: string; type: string; name: string; bridge?: string }, homeId: string): DiscoveredDevice {
   return {
@@ -293,7 +299,7 @@ class NetatmoBridge {
 class LegrandEnergyPlugin implements IntegrationPlugin {
   readonly id = INTEGRATION_ID;
   readonly name = "Legrand Energy";
-  readonly description = "Legrand energy monitoring — NLPC meters, consumption + solar production";
+  readonly description = "Legrand energy monitoring — NLPC/NLY meters, consumption + solar production";
   readonly icon = "Zap";
   readonly apiVersion = 2;
 
@@ -491,15 +497,17 @@ class LegrandEnergyPlugin implements IntegrationPlugin {
     const activeIds = new Set<string>();
 
     for (const mod of modules) {
-      if (mod.type !== "NLPC") continue;
+      if (!METER_TYPES.has(mod.type)) continue;
 
-      // Capture bridge ID from first NLPC with a bridge
+      // Capture bridge ID from first meter module with a bridge
       if (mod.bridge && !this.bridgeId) {
         this.bridgeId = mod.bridge;
         this.logger.info({ moduleId: mod.id, bridge: mod.bridge }, "Bridge ID captured");
       }
 
-      // First NLPC with a bridge = main meter (consumption)
+      // First meter module with a bridge = main meter (consumption).
+      // For NLY three-phase meters, "Total" is always listed before its
+      // "Phase N" sub-modules, so it naturally wins this race.
       if (!this.mainMeterName && mod.bridge) {
         this.mainMeterName = mod.name || mod.id;
         this.logger.info({ name: this.mainMeterName }, "Main energy meter identified");
